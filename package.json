@@ -10,7 +10,9 @@
     "build": "tsc",
     "start": "node build/index.js",
     "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "vitest",
+    "test:ci": "vitest --ci --runInBand --coverage"
   },
   "keywords": [
     "mcp",
@@ -38,6 +40,7 @@
     "eslint": "^9.31.0",
     "globals": "^16.3.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.37.0"
+    "typescript-eslint": "^8.37.0",
+    "vitest": "^3.2.4"
   }
 }
