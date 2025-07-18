@@ -54,7 +54,7 @@ server.registerTool(
       throw new Error("Please provide your Jira API token as the second argument.");
     }
 
-    const primaryTicket: JiraIssue | null = await getJiraTicket(JIRA_BASE_URL, ticketId, JIRA_API_TOKEN);
+    const primaryTicket: JiraIssue | null = await getJiraTicket(JIRA_BASE_URL, ticketId, JIRA_API_TOKEN).catch(() => null);
     if (!primaryTicket?.key) {
       throw new Error(`Failed to retrieve details for ticket ${ticketId}`);
     }

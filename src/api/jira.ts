@@ -85,6 +85,14 @@ export const getJiraTicket = async (
   apiToken: string,
   fieldset: (keyof JiraIssueFields)[] = ["summary", "description", "issuetype", "issuelinks"]
 ): Promise<JiraIssue | null> => {
+  if (!baseUrl || !ticketId || !apiToken) {
+    throw new Error("Base URL, ticket ID, and API token are required.");
+  }
+
+  if (fieldset.length === 0) {
+    throw new Error("At least one field must be specified in the fieldset.");
+  }
+  
   const response = await fetch(`${baseUrl}/rest/api/2/issue/${ticketId}?fields=${fieldset.join(",")}`, {
     method: 'GET',
     headers: {
@@ -94,12 +102,12 @@ export const getJiraTicket = async (
   });
 
   if (!response.ok) {
-    return null;
+    throw new Error(`API returned a non-OK response`);
   }
 
   const data: JiraIssue = await response.json();
   if (data.key !== ticketId) {
-    return null;
+    throw new Error(`API returned an unexpected ticket ID`);
   }
 
   return data;
