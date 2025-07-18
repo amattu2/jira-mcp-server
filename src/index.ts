@@ -18,6 +18,11 @@ const JIRA_BASE_URL = process.argv[2];
 const JIRA_API_TOKEN = process.argv[3];
 
 /**
+ * Metadata fields to retrieve for linked tickets.
+ */
+const LINKED_METADATA = ["summary", "description", "issuetype"];
+
+/**
  * The MCP server instance.
  */
 const server = new McpServer({
@@ -59,7 +64,7 @@ server.registerTool(
       const linkedTicketPromises = primaryTicket.fields.issuelinks.map(async (link) => {
         const linkedTicketId = link.outwardIssue ? link.outwardIssue.key : link.inwardIssue?.key;
         if (linkedTicketId) {
-          const linkedTicketDetails = await getJiraTicket(JIRA_BASE_URL, linkedTicketId, JIRA_API_TOKEN, ["summary", "description", "issuetype"]);
+          const linkedTicketDetails = await getJiraTicket(JIRA_BASE_URL, linkedTicketId, JIRA_API_TOKEN, LINKED_METADATA);
           if (linkedTicketDetails) {
             additionalTickets.push(linkedTicketDetails);
           }
