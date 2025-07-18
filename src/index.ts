@@ -29,11 +29,14 @@ const server = new McpServer({
   },
 });
 
-server.tool(
-  "get-ticket",
-  "Get the details of a Jira ticket and any linked tickets.",
+server.registerTool(
+  "jira-ticket",
   {
-    reference: z.string().regex(/^[A-Z]+-\d+$/),
+    title: "Jira Ticket Metadata",
+    description: "Get the metadata of a Jira ticket and any related tickets.",
+    inputSchema: {
+      reference: z.string().regex(/^[A-Z]+-\d+$/).describe("The Jira ticket reference, e.g., 'PROJ-123'."),
+    },
   },
   async ({ reference }): Promise<CallToolResult> => {
     const ticketId = reference;
@@ -70,8 +73,9 @@ server.tool(
     let resultMarkdown = ``;
     sortedTickets.forEach((ticket: JiraIssue) => {
       // TODO: Include component label if available (Backend, Frontend, etc)
-      resultMarkdown += `# ${ticket.fields.issuetype.name} - ${ticket.fields.summary}\n`;
-      resultMarkdown += `${ticket.fields.description}\n`;
+      resultMarkdown += `# ${ticket.fields.issuetype.name} ${ticket.key}\n\n`;
+      resultMarkdown += `**Summary:** ${ticket.fields.summary}\n`;
+      resultMarkdown += `**Description:** ${ticket.fields.description}\n`;
       resultMarkdown += `\n---\n\n`;
     });
 
@@ -89,10 +93,9 @@ server.tool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Running Jira MCP server on stdin/stdout");
 }
 
 main().catch((error) => {
-  console.error("Fatal error in main():", error);
+  console.error("Server error:", error);
   process.exit(1);
 });
