@@ -26,16 +26,16 @@ describe("getJiraTicket", () => {
     vi.clearAllMocks();
   });
 
-    it("throws if baseUrl, ticketId, or apiToken is missing", async () => {
-      await expect(getJiraTicket("", ticketId, apiToken)).rejects.toThrow();
-      await expect(getJiraTicket(baseUrl, "", apiToken)).rejects.toThrow();
-      await expect(getJiraTicket(baseUrl, ticketId, "")).rejects.toThrow();
-    });
+  it("throws if baseUrl, ticketId, or apiToken is missing", async () => {
+    await expect(getJiraTicket("", ticketId, apiToken)).rejects.toThrow();
+    await expect(getJiraTicket(baseUrl, "", apiToken)).rejects.toThrow();
+    await expect(getJiraTicket(baseUrl, ticketId, "")).rejects.toThrow();
+  });
 
   it("throws if fieldset is empty", async () => {
-    await expect(getJiraTicket(baseUrl, ticketId, apiToken, [])).rejects.toThrow(
-      "At least one field must be specified in the fieldset."
-    );
+    await expect(
+      getJiraTicket(baseUrl, ticketId, apiToken, []),
+    ).rejects.toThrow("At least one field must be specified in the fieldset.");
   });
 
   it("returns JiraIssue when response is ok and key matches", async () => {
@@ -55,7 +55,7 @@ describe("getJiraTicket", () => {
           Authorization: `Bearer ${apiToken}`,
           Accept: "application/json",
         }),
-      })
+      }),
     );
   });
 
@@ -66,7 +66,7 @@ describe("getJiraTicket", () => {
     });
 
     await expect(getJiraTicket(baseUrl, ticketId, apiToken)).rejects.toThrow(
-      `API returned a non-OK response`
+      `API returned a non-OK response`,
     );
   });
 
@@ -77,7 +77,7 @@ describe("getJiraTicket", () => {
     });
 
     await expect(getJiraTicket(baseUrl, ticketId, apiToken)).rejects.toThrow(
-      "API returned an unexpected ticket ID"
+      "API returned an unexpected ticket ID",
     );
   });
 
@@ -91,7 +91,7 @@ describe("getJiraTicket", () => {
     await getJiraTicket(baseUrl, ticketId, apiToken, fields);
     expect(fetch).toHaveBeenCalledWith(
       `${baseUrl}/rest/api/2/issue/${ticketId}?fields=summary,issuetype`,
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 });

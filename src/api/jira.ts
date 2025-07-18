@@ -5,7 +5,7 @@ export type JiraIssue = {
   id: string;
   /**
    * The unique identifier for the issue.
-   * 
+   *
    * @example "DH-1234"
    */
   key: string;
@@ -27,7 +27,7 @@ export type JiraIssueFields = {
   /**
    * The issue links associated with the issue.
    */
-  issuelinks: Array<JiraIssueLink>;   
+  issuelinks: Array<JiraIssueLink>;
   /**
    * The type of issue (e.g., Bug, Task, Story).
    */
@@ -41,16 +41,20 @@ export type JiraIssueLink = {
   id: string;
   /**
    * The type of the issue link.
-   * 
+   *
    * @note If `inwardIssue` is defined, then `outwardIssue` will be undefined, and vice versa.
    */
-  inwardIssue?: Pick<JiraIssue, "id" | "key"> & { fields: Pick<JiraIssueFields, "summary"> };
+  inwardIssue?: Pick<JiraIssue, "id" | "key"> & {
+    fields: Pick<JiraIssueFields, "summary">;
+  };
   /**
    * The outward issue linked to this issue.
-   * 
+   *
    * @note If `outwardIssue` is defined, then `inwardIssue` will be undefined, and vice versa.
    */
-  outwardIssue?: Pick<JiraIssue, "id" | "key"> & { fields: Pick<JiraIssueFields, "summary"> };
+  outwardIssue?: Pick<JiraIssue, "id" | "key"> & {
+    fields: Pick<JiraIssueFields, "summary">;
+  };
   /**
    * The type of the issue link, including its name and description.
    */
@@ -64,11 +68,11 @@ export type JiraIssueType = {
   id: string;
   /**
    * The name of the issue type.
-   * 
+   *
    * @example Task
    */
   name: string;
-}
+};
 
 /**
  * Given a Jira ticket ID, fetches the ticket details from the Jira API.
@@ -83,7 +87,12 @@ export const getJiraTicket = async (
   baseUrl: string,
   ticketId: string,
   apiToken: string,
-  fieldset: (keyof JiraIssueFields)[] = ["summary", "description", "issuetype", "issuelinks"]
+  fieldset: (keyof JiraIssueFields)[] = [
+    "summary",
+    "description",
+    "issuetype",
+    "issuelinks",
+  ],
 ): Promise<JiraIssue | null> => {
   if (!baseUrl || !ticketId || !apiToken) {
     throw new Error("Base URL, ticket ID, and API token are required.");
@@ -92,14 +101,17 @@ export const getJiraTicket = async (
   if (fieldset.length === 0) {
     throw new Error("At least one field must be specified in the fieldset.");
   }
-  
-  const response = await fetch(`${baseUrl}/rest/api/2/issue/${ticketId}?fields=${fieldset.join(",")}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${apiToken}`,
-      'Accept': 'application/json'
-    }
-  });
+
+  const response = await fetch(
+    `${baseUrl}/rest/api/2/issue/${ticketId}?fields=${fieldset.join(",")}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        Accept: "application/json",
+      },
+    },
+  );
 
   if (!response.ok) {
     throw new Error(`API returned a non-OK response`);

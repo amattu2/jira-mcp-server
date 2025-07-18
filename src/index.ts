@@ -40,41 +40,64 @@ server.registerTool(
     title: "Jira Ticket Metadata",
     description: "Get the metadata of a Jira ticket and any related tickets.",
     inputSchema: {
-      reference: z.string().regex(/^[A-Z]+-\d+$/).describe("The Jira ticket reference, e.g., 'PROJ-123'."),
+      reference: z
+        .string()
+        .regex(/^[A-Z]+-\d+$/)
+        .describe("The Jira ticket reference, e.g., 'PROJ-123'."),
     },
   },
   async ({ reference }): Promise<CallToolResult> => {
     const ticketId = reference;
 
     if (!JIRA_BASE_URL) {
-      throw new Error("Please provide your Jira base URL as the first argument.");
-    }
-    
-    if (!JIRA_API_TOKEN) {
-      throw new Error("Please provide your Jira API token as the second argument.");
+      throw new Error(
+        "Please provide your Jira base URL as the first argument.",
+      );
     }
 
-    const primaryTicket: JiraIssue | null = await getJiraTicket(JIRA_BASE_URL, ticketId, JIRA_API_TOKEN).catch(() => null);
+    if (!JIRA_API_TOKEN) {
+      throw new Error(
+        "Please provide your Jira API token as the second argument.",
+      );
+    }
+
+    const primaryTicket: JiraIssue | null = await getJiraTicket(
+      JIRA_BASE_URL,
+      ticketId,
+      JIRA_API_TOKEN,
+    ).catch(() => null);
     if (!primaryTicket?.key) {
       throw new Error(`Failed to retrieve details for ticket ${ticketId}`);
     }
 
     const additionalTickets: JiraIssue[] = [];
     if (primaryTicket.fields.issuelinks.length > 0) {
-      const linkedTicketPromises = primaryTicket.fields.issuelinks.map(async (link) => {
-        const linkedTicketId = link.outwardIssue ? link.outwardIssue.key : link.inwardIssue?.key;
-        if (linkedTicketId) {
-          const linkedTicketDetails = await getJiraTicket(JIRA_BASE_URL, linkedTicketId, JIRA_API_TOKEN, LINKED_METADATA);
-          if (linkedTicketDetails) {
-            additionalTickets.push(linkedTicketDetails);
+      const linkedTicketPromises = primaryTicket.fields.issuelinks.map(
+        async (link) => {
+          const linkedTicketId = link.outwardIssue
+            ? link.outwardIssue.key
+            : link.inwardIssue?.key;
+          if (linkedTicketId) {
+            const linkedTicketDetails = await getJiraTicket(
+              JIRA_BASE_URL,
+              linkedTicketId,
+              JIRA_API_TOKEN,
+              LINKED_METADATA,
+            );
+            if (linkedTicketDetails) {
+              additionalTickets.push(linkedTicketDetails);
+            }
           }
-        }
-      });
+        },
+      );
 
       await Promise.allSettled(linkedTicketPromises);
     }
 
-    const sortedTickets: JiraIssue[] = sortByIssueType(primaryTicket, ...additionalTickets);
+    const sortedTickets: JiraIssue[] = sortByIssueType(
+      primaryTicket,
+      ...additionalTickets,
+    );
     let resultMarkdown = ``;
     sortedTickets.forEach((ticket: JiraIssue) => {
       // TODO: Include component label if available (Backend, Frontend, etc)
@@ -88,7 +111,7 @@ server.registerTool(
       content: [
         {
           type: "text",
-          text: resultMarkdown.trim(), 
+          text: resultMarkdown.trim(),
         },
       ],
     };

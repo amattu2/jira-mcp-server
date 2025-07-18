@@ -25,7 +25,7 @@ describe("sortByIssueType", () => {
       makeIssue("STORY-1", "User Story"),
     ];
     const sorted = sortByIssueType(...issues);
-    expect(sorted.map(i => i.key)).toEqual(["STORY-1", "TASK-1", "BUG-1"]);
+    expect(sorted.map((i) => i.key)).toEqual(["STORY-1", "TASK-1", "BUG-1"]);
   });
 
   it("places unknown types after known types", () => {
@@ -36,7 +36,12 @@ describe("sortByIssueType", () => {
       makeIssue("STORY-1", "User Story"),
     ];
     const sorted = sortByIssueType(...issues);
-    expect(sorted.map(i => i.key)).toEqual(["STORY-1", "TASK-1", "BUG-1", "OTHER-1"]);
+    expect(sorted.map((i) => i.key)).toEqual([
+      "STORY-1",
+      "TASK-1",
+      "BUG-1",
+      "OTHER-1",
+    ]);
   });
 
   it("sorts multiple unknown types together", () => {
@@ -46,7 +51,7 @@ describe("sortByIssueType", () => {
       makeIssue("C", "Improvement"),
     ];
     const sorted = sortByIssueType(...issues);
-    expect(sorted.map(i => i.key)).toEqual(["A", "B", "C"]);
+    expect(sorted.map((i) => i.key)).toEqual(["A", "B", "C"]);
   });
 
   it("handles mixed known and unknown types", () => {
@@ -58,6 +63,6 @@ describe("sortByIssueType", () => {
       makeIssue("E", "Spike"),
     ];
     const sorted = sortByIssueType(...issues);
-    expect(sorted.map(i => i.key)).toEqual(["D", "C", "B", "A", "E"]);
+    expect(sorted.map((i) => i.key)).toEqual(["D", "C", "B", "A", "E"]);
   });
 });

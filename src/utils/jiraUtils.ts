@@ -6,7 +6,7 @@ import type { JiraIssue } from "../api/jira.js";
  * 2. Tasks
  * 3. Bugs
  * 4. All other issue types (in no particular order)
- * 
+ *
  * @param issues The Jira issues to sort.
  * @returns The sorted Jira issues.
  */
