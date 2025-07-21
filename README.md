@@ -6,9 +6,13 @@ Jira to enhance the context for AI-driven code suggestions.
 
 ## Features
 
-TODO
+- Fetches Jira ticket details based on the provided ticket ID.
+- Fetches any linked Jira tickets
+- Provides ticket type, summary, description, and components of the Jira ticket.
 
 ## Setup
+
+### For Local Development
 
 1. Clone the repository:
 
@@ -62,3 +66,31 @@ TODO
       ]
     }
     ```
+
+### For GitHub MCP (Copilot Coding Agent)
+
+1. Navigate to Repository Settings
+2. Find Copilot > Coding agent
+3. MCP Configuration
+4. Add a new MCP configuration with the following details:
+
+   ```json
+    {
+      "mcpServers": {
+        "jira": {
+          "type": "local",
+          "command": "npx",
+          "args": [
+            "jira-cloud-mcp-server@latest"
+          ],
+          "env": {
+            "JIRA_API_TOKEN": "COPILOT_MCP_JIRA_API_TOKEN",
+            "JIRA_BASE_URL": "COPILOT_MCP_JIRA_BASE_URL"
+          },
+          "tools": ["*"]
+        }
+      } 
+    }
+   ```
+
+5. Add the `COPILOT_MCP_JIRA_API_TOKEN` and `COPILOT_MCP_JIRA_BASE_URL` secrets to your repository under Environments Secrets > `copilot` environment.
