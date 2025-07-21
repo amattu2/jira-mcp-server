@@ -8,6 +8,7 @@ const makeIssue = (key: string, issuetype: string): JiraIssue => ({
     issuetype: { id: `mock-${key}-id`, name: issuetype },
     summary: "",
     description: "",
+    components: [],
     issuelinks: [],
   },
 });

@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { getJiraTicket, JiraIssue } from "./api/jira.js";
+import { getJiraTicket, JiraIssue, JiraIssueFields } from "./api/jira.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { sortByIssueType } from "./utils/jiraUtils.js";
 
@@ -20,7 +20,12 @@ const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN;
 /**
  * Metadata fields to retrieve for linked tickets.
  */
-const LINKED_METADATA = ["summary", "description", "issuetype"];
+const LINKED_METADATA: (keyof JiraIssueFields)[] = [
+  "summary",
+  "description",
+  "issuetype",
+  "components",
+];
 
 /**
  * The MCP server instance.
@@ -100,8 +105,8 @@ server.registerTool(
     );
     let resultMarkdown = ``;
     sortedTickets.forEach((ticket: JiraIssue) => {
-      // TODO: Include component label if available (Backend, Frontend, etc)
       resultMarkdown += `# ${ticket.fields.issuetype.name} ${ticket.key}\n\n`;
+      resultMarkdown += `**Components:** ${ticket.fields?.components?.map((c) => c.name).join(", ") ?? "N/A"}\n`;
       resultMarkdown += `**Summary:** ${ticket.fields.summary}\n`;
       resultMarkdown += `**Description:** ${ticket.fields.description}\n`;
       resultMarkdown += `\n---\n\n`;

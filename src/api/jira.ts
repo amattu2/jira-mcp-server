@@ -32,6 +32,10 @@ export type JiraIssueFields = {
    * The type of issue (e.g., Bug, Task, Story).
    */
   issuetype: JiraIssueType;
+  /**
+   * The components associated with the issue.
+   */
+  components: Array<{ id: string; name: string }>;
 } & Record<string, unknown>;
 
 export type JiraIssueLink = {
@@ -91,6 +95,7 @@ export const getJiraTicket = async (
     "summary",
     "description",
     "issuetype",
+    "components",
     "issuelinks",
   ],
 ): Promise<JiraIssue | null> => {

@@ -12,6 +12,7 @@ const mockJiraIssue = (overrides: Partial<JiraIssue> = {}): JiraIssue => ({
     summary: "Test summary",
     description: "Test description",
     issuelinks: [],
+    components: [],
     issuetype: { id: "1", name: "Task" },
   },
   ...overrides,
