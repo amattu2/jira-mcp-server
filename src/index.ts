@@ -7,15 +7,15 @@ import { sortByIssueType } from "./utils/jiraUtils.js";
 
 /**
  * The base URL of the Jira instance to connect to.
- * This should be provided as the first command-line argument.
+ * This should be provided as an environment variable.
  */
-const JIRA_BASE_URL = process.argv[2];
+const JIRA_BASE_URL = process.env.JIRA_BASE_URL;
 
 /**
  * The Jira API token to use for authentication.
- * This should be provided as the second command-line argument.
+ * This should be provided as an environment variable.
  */
-const JIRA_API_TOKEN = process.argv[3];
+const JIRA_API_TOKEN = process.env.JIRA_API_TOKEN;
 
 /**
  * Metadata fields to retrieve for linked tickets.
