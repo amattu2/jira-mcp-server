@@ -1,0 +1,33 @@
+name: ESLint
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches: 
+      - "*"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint:ci
