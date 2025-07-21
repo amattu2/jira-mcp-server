@@ -10,9 +10,10 @@
     "build": "tsc",
     "start": "node build/index.js",
     "lint": "eslint . --ext .ts",
+    "lint:ci": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "vitest",
-    "test:ci": "vitest --ci --runInBand --coverage"
+    "test:ci": "TZ=UTC CI=true vitest --reporter verbose --coverage --minWorkers=2 --maxWorkers=2 --maxConcurrency=2"
   },
   "keywords": [
     "mcp",

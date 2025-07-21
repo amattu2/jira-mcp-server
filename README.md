@@ -42,8 +42,8 @@ TODO
           ],
           "env": {
             "JIRA_API_TOKEN": "${input:jira-api-token}",
-            "JIRA_BASE_URL": "${input:jira-base-url}",
-          },
+            "JIRA_BASE_URL": "${input:jira-base-url}"
+          }
         }
       },
       "inputs": [

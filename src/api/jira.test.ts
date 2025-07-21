@@ -49,7 +49,7 @@ describe("getJiraTicket", () => {
     expect(result).toBeTruthy();
     expect(result?.key).toBe(ticketId);
     expect(fetch).toHaveBeenCalledWith(
-      `${baseUrl}/rest/api/2/issue/${ticketId}?fields=summary,description,issuetype,issuelinks`,
+      `${baseUrl}/rest/api/2/issue/${ticketId}?fields=summary,description,issuetype,components,issuelinks`,
       expect.objectContaining({
         method: "GET",
         headers: expect.objectContaining({
