@@ -1,10 +1,10 @@
 {
-  "name": "jira-mcp-server",
+  "name": "jira-cloud-mcp-server",
   "version": "1.0.0",
   "description": "A model context provider (MCP) server to provide context between a Jira ticket and the GitHub Copilot Chat prompt.",
   "type": "module",
   "bin": {
-    "jira-mcp-server": "build/index.js"
+    "jira-cloud-mcp-server": "build/index.js"
   },
   "scripts": {
     "build": "tsc",
