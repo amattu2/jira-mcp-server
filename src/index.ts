@@ -52,6 +52,17 @@ server.registerTool(
         .regex(/^[A-Z]+-\d+$/)
         .describe("The Jira ticket reference, e.g., 'PROJ-123'."),
     },
+    outputSchema: {
+      tickets: z.array(
+        z.object({
+          key: z.string(),
+          issuetype: z.string(),
+          components: z.array(z.string()),
+          summary: z.string(),
+          description: z.string(),
+        }),
+      ),
+    },
   },
   async ({ reference }): Promise<CallToolResult> => {
     const ticketId = reference;
@@ -115,12 +126,23 @@ server.registerTool(
     });
 
     return {
+      // NOTE: Legacy support with raw text content
       content: [
         {
           type: "text",
           text: resultMarkdown.trim(),
         },
       ],
+      // NOTE: Structured JSON response
+      structuredContent: {
+        tickets: sortedTickets.map((ticket) => ({
+          key: ticket.key,
+          summary: ticket.fields.summary,
+          description: ticket.fields.description,
+          issuetype: ticket.fields.issuetype.name,
+          components: ticket.fields.components.map((c) => c.name),
+        })),
+      },
     };
   },
 );
