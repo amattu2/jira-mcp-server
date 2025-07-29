@@ -33,7 +33,8 @@ const LINKED_METADATA: (keyof JiraIssueFields)[] = [
  * The MCP server instance.
  */
 const server = new McpServer({
-  name: "jira-mcp-server",
+  title: "Jira Cloud MCP Server",
+  name: "jira-cloud-mcp-server",
   version: "1.0.0",
   capabilities: {
     resources: {},
@@ -44,7 +45,7 @@ const server = new McpServer({
 server.registerTool(
   "jira-ticket",
   {
-    title: "Jira Ticket Metadata",
+    title: "Jira Ticket",
     description: "Get the metadata of a Jira ticket and any related tickets.",
     inputSchema: {
       reference: z

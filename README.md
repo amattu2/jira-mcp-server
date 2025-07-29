@@ -38,7 +38,7 @@ Jira to enhance the context for AI-driven code suggestions.
     ```json
     {
       "servers": {
-        "jira-ticket-mcp": {
+        "jira": {
           "type": "stdio",
           "command": "node",
           "args": [
