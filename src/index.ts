@@ -138,10 +138,10 @@ server.registerTool(
       structuredContent: {
         tickets: sortedTickets.map((ticket) => ({
           key: ticket.key,
-          summary: ticket.fields.summary,
-          description: ticket.fields.description,
           issuetype: ticket.fields.issuetype.name,
           components: ticket.fields.components.map((c) => c.name),
+          summary: ticket.fields.summary,
+          description: ticket.fields.description,
         })),
       },
     };
